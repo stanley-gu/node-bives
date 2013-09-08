@@ -5,7 +5,6 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path');
 
@@ -27,14 +26,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-//app.get('/', routes.index);
-app.get('/users', user.list);
-app.all('/', function (req, res, next){
-  res.header('Access-Control-Allow-Origin', "*");
-  res.header("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
-  next();
-})
-app.post('/', routes.bives)
+app.all('/', routes.bives);
 
 http.createServer(app).listen(app.get('port'), process.env.IP || undefined, 
 function(){
