@@ -29,7 +29,12 @@ if ('development' == app.get('env')) {
 
 //app.get('/', routes.index);
 app.get('/users', user.list);
-app.all('/', routes.bives)
+app.all('/', function (req, res, next){
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
+  next();
+})
+app.post('/', routes.bives)
 
 http.createServer(app).listen(app.get('port'), process.env.IP || undefined, 
 function(){
