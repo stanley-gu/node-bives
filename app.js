@@ -25,7 +25,7 @@ io.sockets.on('connection', function (socket) {
       }
     });
 
-    var output = {};
+    var output = {id: data.id};
 
     var command = 'java -cp BiVeS-1.1.jar de.unirostock.sems.bives.api.SBMLDiff first.xml second.xml';
 
