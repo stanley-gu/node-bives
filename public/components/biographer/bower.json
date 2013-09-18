@@ -1,9 +1,0 @@
-{
-  "name": "biographer",
-  "version": "0.0.0",
-  "commit": "05db570f2e03f1c11e3181edf1ebf032f6167328",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/stanley-gu/biographer.git"
-  }
-}

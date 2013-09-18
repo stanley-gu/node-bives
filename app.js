@@ -3,32 +3,52 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , http = require('http')
-  , path = require('path');
+var io = require('socket.io').listen(8002),
+exec = require('child_process').exec,
+fs = require('fs');
 
-var app = express();
+io.sockets.on('connection', function (socket) {
+  socket.on('getDiff', function (data) {
+    fs.writeFile("first.xml", data.first, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("The file was saved!");
+      }
+    });
 
-// all environments
-app.set('port', process.env.PORT || 8002);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+    fs.writeFile("second.xml", data.second, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("The file was saved!");
+      }
+    });
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
+    var output = {};
 
-app.all('/', routes.bives);
+    var command = 'java -cp BiVeS-1.1.jar de.unirostock.sems.bives.api.SBMLDiff first.xml second.xml';
 
-http.createServer(app).listen(app.get('port'), process.env.IP || undefined, 
-function(){
-  console.log('Express server listening on port ' + app.get('port'));
+    child = exec(command, function(error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      output.diff = stdout;
+      //res.send(stdout);
+      //res.send(200);
+      command = 'java -cp BiVeS-1.1.jar de.unirostock.sems.bives.api.SBMLDiff --graphml first.xml second.xml';
+      exec(command, function(error, stdout, stderr) {
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        output.graphml = stdout;
+        socket.emit('response', output);
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+      });
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+    console.log(data);
+  });
 });
