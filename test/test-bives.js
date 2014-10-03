@@ -34,7 +34,7 @@ async.parallel({
         if (err) {
           console.log('ERROR: ' + err);
         } else {
-          console.log(results);
+          console.log(JSON.stringify(results, undefined, 2));
         }
       }
     });
