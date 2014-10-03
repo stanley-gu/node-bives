@@ -1,7 +1,6 @@
 {
   "name": "node-bives",
   "version": "0.0.1",
-  "private": true,
   "main": "lib/bives.js",
   "directories": {
     "lib": "lib"
