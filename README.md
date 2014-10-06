@@ -9,7 +9,7 @@ node-bives
 
 
 
-```
+```javascript
 var bives = require('node-bives');
 
 bives.getDiff({
